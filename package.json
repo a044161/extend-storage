@@ -1,0 +1,27 @@
+{
+  "name": "extend-storage",
+  "version": "1.0.0",
+  "description": "增强型storage",
+  "main": "src/extend-storage/extend-storage.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/a044161/extend-storage.git"
+  },
+  "keywords": [
+    "storage"
+  ],
+  "author": "wengwang",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/a044161/extend-storage/issues"
+  },
+  "homepage": "https://github.com/a044161/extend-storage#readme",
+  "devDependencies": {
+    "browser-sync": "^2.13.0",
+    "chai": "^3.5.0",
+    "gulp": "gulpjs/gulp#4.0"
+  }
+}
