@@ -8,6 +8,22 @@
 <body>
 	<h1>增強Storage</h1>
     <div id="body"></div>
+    <script type="text/javascript" src="./extend-storage/web-storage-cache.js"></script>
 	<script type="text/javascript" src="./extend-storage/extend-storage.js"></script>
+	<script type="text/javascript">
+		var wsCache = new WebStorageCache();
+		// wsCache.set('username', {'name':'www'}, {exp: 100})
+
+		var exStorage = new ExtendStorage();
+		exStorage.addItem('test', {'name':'www','array': [1,2,3,"a"]});
+		exStorage.addItem('test2', {'name':'www','array': [1,2,3,"a"]});
+		// exStorage.updateExp('test', 10000);
+		// exStorage.updateExp('test2', 10000);
+		// exStorage.updateItem('test', {name:'ccc',age:12})
+		// console.log(exStorage.deleteItem('test'));
+		// console.log(exStorage.getAll());
+		// exStorage.deleteAllExp();
+		exStorage.deleteAll();
+	</script>
 </body>
 </html>
