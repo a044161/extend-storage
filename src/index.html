@@ -14,7 +14,7 @@
 			return new Date().valueOf();
 		}
 		var exStorage = new ExtendStorage();
-		exStorage.setItem('test', {'name':'www','array': [1,2,3,"a"]},{baseTime: baseTime});
+		exStorage.setItem('test', {'name':'www','array': [1,2,3,"a"]},{baseTime: 'aa'});
 		exStorage.setItem('test2', {'name':'www','array': [1,2,3,"abc"]});
 		console.log(exStorage.getItem('test2'));
 		console.log(exStorage.getAll());

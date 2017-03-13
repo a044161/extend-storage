@@ -23,7 +23,9 @@
     "base-64": "^0.1.0",
     "browser-sync": "^2.13.0",
     "chai": "^3.5.0",
+    "del": "^2.2.2",
     "gulp": "gulpjs/gulp#4.0",
+    "gulp-rename": "^1.2.2",
     "gulp-uglify": "^2.1.0"
   }
 }
