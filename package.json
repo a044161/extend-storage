@@ -20,8 +20,10 @@
   },
   "homepage": "https://github.com/a044161/extend-storage#readme",
   "devDependencies": {
+    "base-64": "^0.1.0",
     "browser-sync": "^2.13.0",
     "chai": "^3.5.0",
-    "gulp": "gulpjs/gulp#4.0"
+    "gulp": "gulpjs/gulp#4.0",
+    "gulp-uglify": "^2.1.0"
   }
 }

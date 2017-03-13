@@ -1,0 +1,1 @@
+module.exports=function(r){if("string"!=typeof r)return r;try{return JSON.parse(r)}catch(t){return r}};

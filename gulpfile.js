@@ -4,6 +4,7 @@ var gulp = require('gulp');
 
 var browserSync = require('browser-sync');
 var bsCreate = browserSync.create();
+var uglify = require('gulp-uglify');
 
 gulp.task('default', function(){
     bsCreate.init({
@@ -17,4 +18,10 @@ gulp.task('default', function(){
     watcher.on('all', function(event, path, stats){
         bsCreate.reload()
     })
+});
+
+gulp.task('dist', function(){
+    gulp.src('src/**/*.js')
+        .pipe(uglify())
+        .pipe(gulp.dest('dist'))
 })

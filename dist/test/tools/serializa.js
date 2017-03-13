@@ -1,0 +1,1 @@
+module.exports=function(t){return null===t?t:"object"==typeof t?JSON.stringify(t):t};
