@@ -23,7 +23,7 @@ gulp.task('default', function(){
 });
 
 gulp.task('dist', gulp.series(delDist, function(){
-    return gulp.src('src/extend-storage/**/*.js')
+    return gulp.src('src/app/**/*.js')
         .pipe(uglify())
         .pipe(rename({suffix: '.min'}))
         .pipe(gulp.dest('dist'))
