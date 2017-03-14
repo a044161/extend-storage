@@ -51,6 +51,7 @@
 - opt：非必填；配置项，`{exp: 1000}`
   - exp: 超时时间，number 型
   - baseTime：设置基准时间
+  - crypt: 加密方式；默认及目前仅支持为"base64"，值为“null”则不加密
 
 ### getItem(key)
 
