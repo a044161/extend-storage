@@ -42,7 +42,14 @@
 2. `'e'`：该数据超时的时间
 3. `'v'`：该数据具体的值
 
-## 调用方法
+## 调用方式
+
+```
+<script type="text/javascript" src="src/extend-storage/extend-storage.js"></script>
+
+```
+
+## API
 
 ### setItem(key, value, opt)
 
