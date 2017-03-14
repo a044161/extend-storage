@@ -148,3 +148,10 @@ exStorage.clearAll();
 
 1. 增加base64加解密
 2. 增加异常处理
+
+### 2017.03.14
+
+1. 将delete重命名为clear
+2. 更改AMD、CMD兼容写法
+3. updateItem重命名为mergeItem
+4. 全局名ExtendStorage重命名为extendStorage
