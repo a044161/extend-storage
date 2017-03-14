@@ -7,22 +7,64 @@
 </head>
 <body>
 	<h1>增強Storage</h1>
-    <div id="body"></div>
+    <div id="body">
+    	<div id="showTime">
+    		<p id="date"></p>
+    		<p id="timestamp"></p>
+    	</div>
+    	<button id="addItem">基准时间测试</button>
+    </div>
     <script type="text/javascript" src="./extend-storage/extend-storage.js"></script>
 	<script type="text/javascript">
-		var baseTime = function(){
-			return new Date().valueOf();
-		}
+		// var btnAddItem = document.getElementById('addItem');
+		// var showDate = document.getElementById('date');
+		// var showTimeStamp = document.getElementById('timestamp');
+		// var baseTime = function(){
+		// 	return new Date().valueOf();
+		// }
+
 		var exStorage = new ExtendStorage();
-		exStorage.setItem('test', {'name':'www','array': [1,2,3,"a"]},{baseTime: 'aa'});
+		// console.log(exStorage)
+		// exStorage.cover();
+		exStorage.setItem('test', {'name':'www','array': [1,2,3,"a"]},{crypt: null});
 		exStorage.setItem('test2', {'name':'www','array': [1,2,3,"abc"]});
-		console.log(exStorage.getItem('test2'));
-		console.log(exStorage.getAll());
-		exStorage.updateExp('test', 1000);
-		exStorage.updateItem('test', {name:'ccc',age:12})
-		exStorage.deleteItem('test');
-		exStorage.deleteAllExp();
-		exStorage.deleteAll();
+		console.log(exStorage.getItem('test'));
+		// console.log(exStorage.getAll());
+		// exStorage.updateExp('test', 1000);
+		// exStorage.updateItem('test', {name:'ccc',age:12})
+		// exStorage.deleteItem('test');
+		// exStorage.deleteAllExp();
+		// exStorage.deleteAll()
+
+
+		// btnAddItem.addEventListener('click', function(){
+		// 	var key = new Date().valueOf();
+		// 	exStorage.setItem(key, {'name':'www','array': [1,2,3,"a"]},{baseTime: baseTime});
+		// })
+
+		// setInterval(function(){
+		// 	showDate.innerText = clock().fullDate;
+		// 	showTimeStamp.innerText = clock().timestamp;
+		// 	var key = new Date().valueOf();
+		// 	exStorage.setItem(key, {'name':'www','array': new Array( 1025 ).join( "a" )},{baseTime: baseTime});
+		// },100);
+
+		// function clock(){
+		// 	var _Date = new Date();
+		// 	var year = _Date.getFullYear();
+		// 	var month = _Date.getMonth();
+		// 	var date = _Date.getDate();
+		// 	var hour = _Date.getHours();
+		// 	var min = _Date.getMinutes();
+		// 	var sec = _Date.getSeconds();
+
+		// 	var fullDate = year + '-' + parseInt(month+1) + '-' + date + ' ' + hour + ':' + min + ':' + sec
+		// 	var timestamp = _Date.valueOf();
+		// 	return{
+		// 		fullDate: fullDate,
+		// 		timestamp: timestamp
+		// 	}
+		// }
 	</script>
 </body>
 </html>

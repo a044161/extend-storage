@@ -12,6 +12,8 @@
 })(window, function(isGlobal) {
     "use strict";
     
+    var version = '1.0.0';
+
     var base64 = Base64();
 
     // 设置最大时间戳
@@ -33,7 +35,7 @@
 
     // 获取时间，当用户的基准时间为一个函数时，则执行该函数，不是的话则进行时间格式转换
     var _getTimeStamp = function(date) {
-
+    	var _date;
         if (date){
         	var _date = typeof date === 'function' ? date() : new Date(date).valueOf();
         }else{
@@ -41,7 +43,8 @@
         }
 
         if(isNaN(_date)){
-        	throw new Error('argument "' + _date + '" must be Number');
+        	var arg = typeof date === 'function' ? _date : date;
+        	throw new Error('argument "' + arg + '" must be Number');
         }else{
         	return _date;
         }
@@ -223,8 +226,13 @@
                 var c = item.c;
                 //判断是否超时
                 if (!_isExpries(e,c)) { // 没有超时则返回对应的值，不返回创建时间和超时时间字段
-                    var v = _toJSON(_crypt(_options.crypt).decode(item.v));
-                    return v;
+                	try{
+                		var v = _toJSON(_crypt(_options.crypt).decode(item.v));
+                    	return v;
+                	}catch(e){
+                		return item;
+                	}
+                    
                 } else { // 超时删除
                     this.deleteItem(key);
                     return null;
@@ -308,6 +316,7 @@
     };
 
     function ExtendStorage(options) {
+    	this.version = version;
         var defaultOpt = {
             storage: 'localStorage',
             exp: _getTimeStamp(maxTimeStamp),
@@ -347,11 +356,10 @@
         // 设置基准时间
         _baseTime = _options.baseTime;
 
-        this.storage = setStorageType(_options.storage); 
+        this.storage = setStorageType(_options.storage);
     };
 
     ExtendStorage.prototype = ExtendStorageAPI;
-    
 
     /*! http://mths.be/base64 v0.1.0 by @mathias | MIT license */
     function Base64 () {
