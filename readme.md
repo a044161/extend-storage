@@ -1,4 +1,29 @@
-[TOC]
+<!-- MarkdownTOC -->
+
+- [增强型Storage](#增强型storage)
+  - [终端类型](#终端类型)
+  - [功能](#功能)
+  - [功能点](#功能点)
+  - [存储格式](#存储格式)
+  - [调用方式](#调用方式)
+  - [API](#api)
+    - [setItem\(key, value, opt\)](#setitemkey-value-opt)
+    - [getItem\(key\)](#getitemkey)
+    - [getAll\(\)](#getall)
+    - [mergeItem\(key, value, opt\)](#mergeitemkey-value-opt)
+    - [updateExp\(key, exp\)](#updateexpkey-exp)
+    - [clearItem\(key\)](#clearitemkey)
+    - [clearAllExp\(\)](#clearallexp)
+    - [clearAll\(\)](#clearall)
+  - [例子](#例子)
+  - [Feture](#feture)
+  - [Bugs](#bugs)
+  - [Logs](#logs)
+    - [2017.03.10](#20170310)
+    - [2017.03.13](#20170313)
+    - [2017.03.14](#20170314)
+
+<!-- /MarkdownTOC -->
 
 # 增强型Storage
 
