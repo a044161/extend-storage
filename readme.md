@@ -1,3 +1,5 @@
+[TOC]
+
 # 增强型Storage
 
 ## 终端类型
@@ -63,7 +65,7 @@
 
 获取全部存储的数据，只返回数据的具体值，不返回创建时间和超时时间
 
-### updateItem(key, value, opt)
+### mergeItem(key, value, opt)
 
 更新某一项
 
@@ -79,17 +81,17 @@
 - key：必填项；key值
 - exp：必填项；超时时间
 
-### deleteItem(key)
+### clearItem(key)
 
 删除某一项
 
 - key：必填项；key值
 
-### deleteAllExp()
+### clearAllExp()
 
 删除全部超时项
 
-### deleteAll()
+### clearAll()
 
 删除全部数据
 
@@ -118,16 +120,16 @@ console.log(exStorage.getAll());
 exStorage.updateExp('test', 1000);
 
 // 更新某一项
-exStorage.updateItem('test', {name:'ccc',age:12})
+exStorage.mergeItem('test', {name:'ccc',age:12})
 
 // 删除某一项
-exStorage.deleteItem('test');
+exStorage.clearItem('test');
 
 // 删除超时项
-exStorage.deleteAllExp();
+exStorage.clearAllExp();
 
 // 删除全部
-exStorage.deleteAll();
+exStorage.clearAll();
 
 ```
 

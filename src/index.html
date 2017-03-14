@@ -16,6 +16,7 @@
     </div>
     <script type="text/javascript" src="./extend-storage/extend-storage.js"></script>
 	<script type="text/javascript">
+		var exStorage = new extendStorage();
 		// var btnAddItem = document.getElementById('addItem');
 		// var showDate = document.getElementById('date');
 		// var showTimeStamp = document.getElementById('timestamp');
@@ -23,18 +24,18 @@
 		// 	return new Date().valueOf();
 		// }
 
-		var exStorage = new ExtendStorage();
+		
 		// console.log(exStorage)
 		// exStorage.cover();
-		exStorage.setItem('test', {'name':'www','array': [1,2,3,"a"]},{crypt: null});
-		exStorage.setItem('test2', {'name':'www','array': [1,2,3,"abc"]});
-		console.log(exStorage.getItem('test'));
+		// exStorage.setItem('test', {'name':'www','array': [1,2,3,"a"]},{crypt: null,baseTime:'2017-10-10'});
+		// exStorage.setItem('test2', {'name':'www','array': [1,2,3,"abc"]});
+		// console.log(exStorage.getItem('test'));
 		// console.log(exStorage.getAll());
 		// exStorage.updateExp('test', 1000);
-		// exStorage.updateItem('test', {name:'ccc',age:12})
-		// exStorage.deleteItem('test');
-		// exStorage.deleteAllExp();
-		// exStorage.deleteAll()
+		// exStorage.mergeItem('test', {name:'ccc',age:12})
+		// exStorage.clearItem('test');
+		// exStorage.clearAllExp();
+		// exStorage.clearAll()
 
 
 		// btnAddItem.addEventListener('click', function(){

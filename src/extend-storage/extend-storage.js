@@ -6,7 +6,7 @@
     } else if (typeof define === 'object') {
         define(factory);
     } else {
-        factory(true);
+    	window.extendStorage = factory();
     }
 
 })(window, function(isGlobal) {
@@ -14,6 +14,7 @@
     
     var version = '1.0.0';
 
+    // 调用自带的base64
     var base64 = Base64();
 
     // 设置最大时间戳
@@ -253,7 +254,7 @@
         },
 
         // 更新某项
-        updateItem: function(key, value, opt) {
+        mergeItem: function(key, value, opt) {
             var item = this.storage.getItem(key);
 
             // 对值进行转换
@@ -300,17 +301,17 @@
             }
         },
         // 删除单个项
-        deleteItem: function(key) {
+       clearItem: function(key) {
             this.storage.removeItem(key);
         },
         // 删除所有超时项
-        deleteAllExp: function() {
+       clearAllExp: function() {
             for (var key in this.storage) {
                 this.getItem(key);
             }
         },
         // 删除所有项
-        deleteAll: function() {
+       clearAll: function() {
             this.storage.clear();
         }
     };
@@ -486,11 +487,6 @@
             'version': '0.1.0'
         };
     };
-
-
-    if (isGlobal) {
-        window.ExtendStorage = ExtendStorage;
-    }
 
     return ExtendStorage;
 });
