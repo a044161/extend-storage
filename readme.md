@@ -12,9 +12,9 @@
 		- [getAll\(\)](#getall)
 		- [mergeItem\(key, value, opt\)](#mergeitemkey-value-opt)
 		- [updateExp\(key, exp\)](#updateexpkey-exp)
-		- [clearItem\(key\)](#clearitemkey)
+		- [removeItem\(key\)](#removeitemkey)
 		- [clearAllExp\(\)](#clearallexp)
-		- [clearAll\(\)](#clearall)
+		- [clear\(\)](#clear)
 	- [例子](#例子)
 	- [Feture](#feture)
 	- [Bugs](#bugs)
@@ -22,6 +22,7 @@
 		- [2017.03.10](#20170310)
 		- [2017.03.13](#20170313)
 		- [2017.03.14](#20170314)
+		- [2017.03.15](#20170315)
 
 <!-- /MarkdownTOC -->
 
@@ -113,7 +114,7 @@
 - key：必填项；key值
 - exp：必填项；超时时间
 
-### clearItem(key)
+### removeItem(key)
 
 删除某一项
 
@@ -123,7 +124,7 @@
 
 删除全部超时项
 
-### clearAll()
+### clear()
 
 删除全部数据
 
@@ -155,13 +156,13 @@ exStorage.updateExp('test', 1000);
 exStorage.mergeItem('test', {name:'ccc',age:12})
 
 // 删除某一项
-exStorage.clearItem('test');
+exStorage.removeItem('test');
 
 // 删除超时项
 exStorage.clearAllExp();
 
 // 删除全部
-exStorage.clearAll();
+exStorage.clear();
 
 ```
 
@@ -187,3 +188,9 @@ exStorage.clearAll();
 2. 更改AMD、CMD兼容写法
 3. updateItem重命名为mergeItem
 4. 全局名ExtendStorage重命名为extendStorage
+
+### 2017.03.15
+
+1. 将加解密的异常处理移动至，_crypt 中
+2. 更换base64插件（原插件无法加密字符串过长的数据）
+3. 为保持与原localstorage的方法相同，将clearItem修改为removeItem，将clearAll修改为clear

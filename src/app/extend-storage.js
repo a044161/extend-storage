@@ -6,12 +6,12 @@
     } else if (typeof define === 'object') {
         define(factory);
     } else {
-    	window.extendStorage = factory();
+        window.extendStorage = factory();
     }
 
 })(window, function(isGlobal) {
     "use strict";
-    
+
     var version = '1.0.0';
 
     // 调用自带的base64
@@ -24,30 +24,30 @@
     var _isSupport; // 浏览器是否支持Storage
 
     // 深拷贝对象
-    var _deepCopy = function(obj){
-    	var newObj = {};
+    var _deepCopy = function(obj) {
+        var newObj = {};
 
-    	for(var key in obj){
-    		newObj[key] = obj[key];
-    	}
+        for (var key in obj) {
+            newObj[key] = obj[key];
+        }
 
-    	return newObj;
+        return newObj;
     };
 
     // 获取时间，当用户的基准时间为一个函数时，则执行该函数，不是的话则进行时间格式转换
     var _getTimeStamp = function(date) {
-    	var _date;
-        if (date){
-        	var _date = typeof date === 'function' ? date() : new Date(date).valueOf();
-        }else{
-        	var _date = new Date().valueOf();
+        var _date;
+        if (date) {
+            var _date = typeof date === 'function' ? date() : new Date(date).valueOf();
+        } else {
+            var _date = new Date().valueOf();
         }
 
-        if(isNaN(_date)){
-        	var arg = typeof date === 'function' ? _date : date;
-        	throw new Error('argument "' + arg + '" must be Number');
-        }else{
-        	return _date;
+        if (isNaN(_date)) {
+            var arg = typeof date === 'function' ? _date : date;
+            throw new Error('argument "' + arg + '" must be Number');
+        } else {
+            return _date;
         }
     }
 
@@ -57,7 +57,7 @@
         if (!isNaN(time)) {
             return nowTime + parseInt(time);
         } else {
-        	throw new Error('argument "' + time + '" must be Number');
+            throw new Error('argument "' + time + '" must be Number');
         }
     }
 
@@ -94,7 +94,7 @@
         var isObject = typeof data === 'object';
 
         if (isObject) {
-        	return JSON.stringify(data)
+            return JSON.stringify(data)
         } else {
             return data;
         }
@@ -115,29 +115,39 @@
     };
 
     // 加密/解密
-    var _crypt = function(type){
-    	switch(type){
-    		case 'base64':
-    			return {
-    				encode: function(e) {
-		                return base64.encode(e);
-		            },
-		            decode: function(c) {
-		                return base64.decode(c);
-		            }
-    			}
-    		default:
-    			return{
-    				encode: function(e) {
-		                return e;
-		            },
-		            decode: function(c) {
-		                return c;
-		            }
-    			}
-    	}
+    var _crypt = function(type) {
+        switch (type) {
+            case 'base64':
+                return {
+                    encode: function(e) {
+                        try {
+                            return base64.encode(e)
+                        } catch (error) {
+                            return e;
+                        }
+
+                    },
+                    decode: function(c) {
+                        try {
+                            return base64.decode(c);
+                        } catch (error) {
+                            return c;
+                        }
+
+                    }
+                }
+            default:
+                return {
+                    encode: function(e) {
+                        return e;
+                    },
+                    decode: function(c) {
+                        return c;
+                    }
+                }
+        }
     };
-   
+
 
     // 对将要存入的对象转换格式，添加额外的参数
     var _setExtraData = function(value, options) {
@@ -151,22 +161,22 @@
 
     // 判断浏览器是否支持Storage
     var _isSupportStorage = function(type) {
-    	try{
-    		var isSupportLS = window.localStorage instanceof Storage;
-	        var isSupportSS = window.sessionStorage instanceof Storage;
+        try {
+            var isSupportLS = window.localStorage instanceof Storage;
+            var isSupportSS = window.sessionStorage instanceof Storage;
 
-	        switch (type) {
-	            case 'localStorage':
-	                return isSupportLS;
-	            case 'sessionStorage':
-	                return isSupportSS;
-	            default:
-	                return isSupportLS && isSupportSS;
-	        }
-    	}catch(e){
-    		throw new Error("don't support Web Storage");
-    	}
-        
+            switch (type) {
+                case 'localStorage':
+                    return isSupportLS;
+                case 'sessionStorage':
+                    return isSupportSS;
+                default:
+                    return isSupportLS && isSupportSS;
+            }
+        } catch (e) {
+            throw new Error("don't support Web Storage");
+        }
+
     };
 
     _isSupport = _isSupportStorage();
@@ -180,14 +190,14 @@
             if (e.code) {
                 switch (e.code) {
                     case 22:
-                    quotaExceeded = true;
-                    break;
-                    case 1014:
-                    // Firefox
-                    if (e.name === 'NS_ERROR_DOM_QUOTA_REACHED') {
                         quotaExceeded = true;
-                    }
-                    break;
+                        break;
+                    case 1014:
+                        // Firefox
+                        if (e.name === 'NS_ERROR_DOM_QUOTA_REACHED') {
+                            quotaExceeded = true;
+                        }
+                        break;
                 }
             } else if (e.number === -2147024882) {
                 // Internet Explorer 8
@@ -215,6 +225,7 @@
             // 生成保存项
             var itemValue = _setExtraData(value, opt);
 
+
             this._saveDataWithHandleError(key, _toString(itemValue));
         },
         // 获取某项
@@ -222,18 +233,13 @@
             var item = this.storage.getItem(key);
 
             if (item && _toJSON(item).v) { // 判断是否有该项，以及是否为该插件赋值的项
-                item = _toJSON(item); 
+                item = _toJSON(item);
                 var e = item.e;
                 var c = item.c;
                 //判断是否超时
-                if (!_isExpries(e,c)) { // 没有超时则返回对应的值，不返回创建时间和超时时间字段
-                	try{
-                		var v = _toJSON(_crypt(_options.crypt).decode(item.v));
-                    	return v;
-                	}catch(e){
-                		return item;
-                	}
-                    
+                if (!_isExpries(e, c)) { // 没有超时则返回对应的值，不返回创建时间和超时时间字段
+                    var v = _toJSON(_crypt(_options.crypt).decode(item.v));
+                    return v;
                 } else { // 超时删除
                     this.deleteItem(key);
                     return null;
@@ -269,7 +275,7 @@
             item.c = _getTimeStamp(_options.baseTime);
 
             // 更新超时时间
-            if (opt && opt.exp) { 
+            if (opt && opt.exp) {
                 item.e = _addTimeStamp(opt.exp, item.c);
             };
 
@@ -280,7 +286,7 @@
                 item.v = _crypt(_options.crypt).encode(_toString(_extend(item.v, value)));
             }
 
-           	// 对心值进行转换
+            // 对心值进行转换
             item = _toString(item);
 
             this._saveDataWithHandleError(key, item);
@@ -297,27 +303,27 @@
             } else if (item && !_toJSON(item).v) {
                 this.setItem(key, item, exp);
             } else {
-            	return item;
+                return item;
             }
         },
         // 删除单个项
-       clearItem: function(key) {
+        removeItem: function(key) {
             this.storage.removeItem(key);
         },
         // 删除所有超时项
-       clearAllExp: function() {
+        clearAllExp: function() {
             for (var key in this.storage) {
                 this.getItem(key);
             }
         },
         // 删除所有项
-       clearAll: function() {
+        clear: function() {
             this.storage.clear();
         }
     };
 
     function ExtendStorage(options) {
-    	this.version = version;
+        this.version = version;
         var defaultOpt = {
             storage: 'localStorage',
             exp: _getTimeStamp(maxTimeStamp),
@@ -335,21 +341,21 @@
         }
 
         // 保存数据时对是否超过容量进行异常处理
-        this._saveDataWithHandleError = function(key, value){
-        	try{
-        		this.storage.setItem(key, value);
-        	}catch(e){
-        		if(_isQuotaExceeded(e)){
-        			this.deleteAllExp();
-        			try{
-        				this.storage.setItem(key, value);
-        			}catch(e){
-        				throw e;
-        			}
-        		}else{
-        			throw e;
-        		}
-        	}
+        this._saveDataWithHandleError = function(key, value) {
+            try {
+                this.storage.setItem(key, value);
+            } catch (e) {
+                if (_isQuotaExceeded(e)) {
+                    this.deleteAllExp();
+                    try {
+                        this.storage.setItem(key, value);
+                    } catch (e) {
+                        throw e;
+                    }
+                } else {
+                    throw e;
+                }
+            }
         }
 
         // 设置全局配置项
@@ -360,133 +366,146 @@
         this.storage = setStorageType(_options.storage);
     };
 
-    ExtendStorage.prototype = ExtendStorageAPI;
-
-    /*! http://mths.be/base64 v0.1.0 by @mathias | MIT license */
-    function Base64 () {
-        var InvalidCharacterError = function(message) {
-            this.message = message;
-        };
-        InvalidCharacterError.prototype = new Error;
-        InvalidCharacterError.prototype.name = 'InvalidCharacterError';
-
-        var error = function(message) {
-            // Note: the error messages used throughout this file match those used by
-            // the native `atob`/`btoa` implementation in Chromium.
-            throw new InvalidCharacterError(message);
-        };
-
-        var TABLE = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
-        // http://whatwg.org/html/common-microsyntaxes.html#space-character
-        var REGEX_SPACE_CHARACTERS = /[\t\n\f\r ]/g;
-
-        // `decode` is designed to be fully compatible with `atob` as described in the
-        // HTML Standard. http://whatwg.org/html/webappapis.html#dom-windowbase64-atob
-        // The optimized base64-decoding algorithm used is based on @atk’s excellent
-        // implementation. https://gist.github.com/atk/1020396
-        var decode = function(input) {
-            input = String(input)
-                .replace(REGEX_SPACE_CHARACTERS, '');
-            var length = input.length;
-            if (length % 4 == 0) {
-                input = input.replace(/==?$/, '');
-                length = input.length;
+    /*
+     * $Id: base64.js,v 2.15 2014/04/05 12:58:57 dankogai Exp dankogai $
+     *
+     *  Licensed under the BSD 3-Clause License.
+     *    http://opensource.org/licenses/BSD-3-Clause
+     *
+     *  References:
+     *    http://en.wikipedia.org/wiki/Base64
+     */
+    function Base64() {
+        var version = "2.1.9";
+        // if node.js, we use Buffer
+        var buffer;
+        if (typeof module !== 'undefined' && module.exports) {
+            try {
+                buffer = require('buffer').Buffer;
+            } catch (err) {}
+        }
+        // constants
+        var b64chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+        var b64tab = function(bin) {
+            var t = {};
+            for (var i = 0, l = bin.length; i < l; i++) t[bin.charAt(i)] = i;
+            return t;
+        }(b64chars);
+        var fromCharCode = String.fromCharCode;
+        // encoder stuff
+        var cb_utob = function(c) {
+            if (c.length < 2) {
+                var cc = c.charCodeAt(0);
+                return cc < 0x80 ? c : cc < 0x800 ? (fromCharCode(0xc0 | (cc >>> 6)) + fromCharCode(0x80 | (cc & 0x3f))) : (fromCharCode(0xe0 | ((cc >>> 12) & 0x0f)) + fromCharCode(0x80 | ((cc >>> 6) & 0x3f)) + fromCharCode(0x80 | (cc & 0x3f)));
+            } else {
+                var cc = 0x10000 + (c.charCodeAt(0) - 0xD800) * 0x400 + (c.charCodeAt(1) - 0xDC00);
+                return (fromCharCode(0xf0 | ((cc >>> 18) & 0x07)) + fromCharCode(0x80 | ((cc >>> 12) & 0x3f)) + fromCharCode(0x80 | ((cc >>> 6) & 0x3f)) + fromCharCode(0x80 | (cc & 0x3f)));
             }
-            if (
-                length % 4 == 1 ||
-                // http://whatwg.org/C#alphanumeric-ascii-characters
-                /[^+a-zA-Z0-9/]/.test(input)
-            ) {
-                error(
-                    'Invalid character: the string to be decoded is not correctly encoded.'
-                );
-            }
-            var bitCounter = 0;
-            var bitStorage;
-            var buffer;
-            var output = '';
-            var position = -1;
-            while (++position < length) {
-                buffer = TABLE.indexOf(input.charAt(position));
-                bitStorage = bitCounter % 4 ? bitStorage * 64 + buffer : buffer;
-                // Unless this is the first of a group of 4 characters…
-                if (bitCounter++ % 4) {
-                    // …convert the first 8 bits to a single ASCII character.
-                    output += String.fromCharCode(
-                        0xFF & bitStorage >> (-2 * bitCounter & 6)
+        };
+        var re_utob = /[\uD800-\uDBFF][\uDC00-\uDFFFF]|[^\x00-\x7F]/g;
+        var utob = function(u) {
+            return u.replace(re_utob, cb_utob);
+        };
+        var cb_encode = function(ccc) {
+            var padlen = [0, 2, 1][ccc.length % 3],
+                ord = ccc.charCodeAt(0) << 16 | ((ccc.length > 1 ? ccc.charCodeAt(1) : 0) << 8) | ((ccc.length > 2 ? ccc.charCodeAt(2) : 0)),
+                chars = [
+                    b64chars.charAt(ord >>> 18),
+                    b64chars.charAt((ord >>> 12) & 63),
+                    padlen >= 2 ? '=' : b64chars.charAt((ord >>> 6) & 63),
+                    padlen >= 1 ? '=' : b64chars.charAt(ord & 63)
+                ];
+            return chars.join('');
+        };
+        var btoa = window.btoa ? function(b) {
+            return window.btoa(b);
+        } : function(b) {
+            return b.replace(/[\s\S]{1,3}/g, cb_encode);
+        };
+        var _encode = buffer ? function(u) {
+            return (u.constructor === buffer.constructor ? u : new buffer(u))
+                .toString('base64')
+        } : function(u) {
+            return btoa(utob(u))
+        };
+        var encode = function(u, urisafe) {
+            return !urisafe ? _encode(String(u)) : _encode(String(u)).replace(/[+\/]/g, function(m0) {
+                return m0 == '+' ? '-' : '_';
+            }).replace(/=/g, '');
+        };
+        var encodeURI = function(u) {
+            return encode(u, true)
+        };
+        // decoder stuff
+        var re_btou = new RegExp([
+            '[\xC0-\xDF][\x80-\xBF]',
+            '[\xE0-\xEF][\x80-\xBF]{2}',
+            '[\xF0-\xF7][\x80-\xBF]{3}'
+        ].join('|'), 'g');
+        var cb_btou = function(cccc) {
+            switch (cccc.length) {
+                case 4:
+                    var cp = ((0x07 & cccc.charCodeAt(0)) << 18) | ((0x3f & cccc.charCodeAt(1)) << 12) | ((0x3f & cccc.charCodeAt(2)) << 6) | (0x3f & cccc.charCodeAt(3)),
+                        offset = cp - 0x10000;
+                    return (fromCharCode((offset >>> 10) + 0xD800) + fromCharCode((offset & 0x3FF) + 0xDC00));
+                case 3:
+                    return fromCharCode(
+                        ((0x0f & cccc.charCodeAt(0)) << 12) | ((0x3f & cccc.charCodeAt(1)) << 6) | (0x3f & cccc.charCodeAt(2))
                     );
-                }
+                default:
+                    return fromCharCode(
+                        ((0x1f & cccc.charCodeAt(0)) << 6) | (0x3f & cccc.charCodeAt(1))
+                    );
             }
-            return output;
         };
-
-        // `encode` is designed to be fully compatible with `btoa` as described in the
-        // HTML Standard: http://whatwg.org/html/webappapis.html#dom-windowbase64-btoa
-        var encode = function(input) {
-            input = String(input);
-            if (/[^\0-\xFF]/.test(input)) {
-                // Note: no need to special-case astral symbols here, as surrogates are
-                // matched, and the input is supposed to only contain ASCII anyway.
-                error(
-                    'The string to be encoded contains characters outside of the ' +
-                    'Latin1 range.'
-                );
-            }
-            var padding = input.length % 3;
-            var output = '';
-            var position = -1;
-            var a;
-            var b;
-            var c;
-            var d;
-            var buffer;
-            // Make sure any padding is handled outside of the loop.
-            var length = input.length - padding;
-
-            while (++position < length) {
-                // Read three bytes, i.e. 24 bits.
-                a = input.charCodeAt(position) << 16;
-                b = input.charCodeAt(++position) << 8;
-                c = input.charCodeAt(++position);
-                buffer = a + b + c;
-                // Turn the 24 bits into four chunks of 6 bits each, and append the
-                // matching character for each of them to the output.
-                output += (
-                    TABLE.charAt(buffer >> 18 & 0x3F) +
-                    TABLE.charAt(buffer >> 12 & 0x3F) +
-                    TABLE.charAt(buffer >> 6 & 0x3F) +
-                    TABLE.charAt(buffer & 0x3F)
-                );
-            }
-
-            if (padding == 2) {
-                a = input.charCodeAt(position) << 8;
-                b = input.charCodeAt(++position);
-                buffer = a + b;
-                output += (
-                    TABLE.charAt(buffer >> 10) +
-                    TABLE.charAt((buffer >> 4) & 0x3F) +
-                    TABLE.charAt((buffer << 2) & 0x3F) +
-                    '='
-                );
-            } else if (padding == 1) {
-                buffer = input.charCodeAt(position);
-                output += (
-                    TABLE.charAt(buffer >> 2) +
-                    TABLE.charAt((buffer << 4) & 0x3F) +
-                    '=='
-                );
-            }
-
-            return output;
+        var btou = function(b) {
+            return b.replace(re_btou, cb_btou);
+        };
+        var cb_decode = function(cccc) {
+            var len = cccc.length,
+                padlen = len % 4,
+                n = (len > 0 ? b64tab[cccc.charAt(0)] << 18 : 0) | (len > 1 ? b64tab[cccc.charAt(1)] << 12 : 0) | (len > 2 ? b64tab[cccc.charAt(2)] << 6 : 0) | (len > 3 ? b64tab[cccc.charAt(3)] : 0),
+                chars = [
+                    fromCharCode(n >>> 16),
+                    fromCharCode((n >>> 8) & 0xff),
+                    fromCharCode(n & 0xff)
+                ];
+            chars.length -= [0, 0, 2, 1][padlen];
+            return chars.join('');
+        };
+        var atob = window.atob ? function(a) {
+            return window.atob(a);
+        } : function(a) {
+            return a.replace(/[\s\S]{1,4}/g, cb_decode);
+        };
+        var _decode = buffer ? function(a) {
+            return (a.constructor === buffer.constructor ? a : new buffer(a, 'base64')).toString();
+        } : function(a) {
+            return btou(atob(a))
+        };
+        var decode = function(a) {
+            return _decode(
+                String(a).replace(/[-_]/g, function(m0) {
+                    return m0 == '-' ? '+' : '/'
+                })
+                .replace(/[^A-Za-z0-9\+\/]/g, '')
+            );
         };
 
         return {
-            'encode': encode,
-            'decode': decode,
-            'version': '0.1.0'
+            VERSION: version,
+            atob: atob,
+            btoa: btoa,
+            fromBase64: decode,
+            toBase64: encode,
+            utob: utob,
+            encode: encode,
+            encodeURI: encodeURI,
+            btou: btou,
+            decode: decode,
         };
-    };
+    }
 
+    ExtendStorage.prototype = ExtendStorageAPI;
     return ExtendStorage;
 });
